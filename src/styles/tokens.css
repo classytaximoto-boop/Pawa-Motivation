@@ -1,0 +1,92 @@
+/* ============================================================
+   BOOST — DESIGN TOKENS
+   Palette : braise (ignition/énergie) + acier (discipline/structure)
+   ============================================================ */
+
+:root {
+  /* --- Surfaces --- */
+  --bg-void: #0B0D10;          /* fond global, quasi noir */
+  --bg-surface: #14171C;       /* cartes */
+  --bg-surface-raised: #1B1F26; /* cartes surélevées / modales */
+  --bg-surface-hover: #21262E;
+  --border-subtle: #262B33;
+  --border-strong: #363C46;
+
+  /* --- Accent principal : BRAISE (ignition, action, boost) --- */
+  --ember-500: #FF6B35;
+  --ember-400: #FF8A5C;
+  --ember-600: #E8511F;
+  --ember-glow: rgba(255, 107, 53, 0.35);
+
+  /* --- Accent secondaire : ACIER (discipline, données, structure) --- */
+  --steel-500: #3D9BE9;
+  --steel-400: #6BB4EE;
+  --steel-600: #2A7BC4;
+
+  /* --- États sémantiques --- */
+  --success-500: #3ECF8E;
+  --warning-500: #E8A33D;
+  --danger-500: #E9484A;
+
+  /* --- Texte --- */
+  --text-primary: #F3F4F6;
+  --text-secondary: #A6ACB8;
+  --text-tertiary: #6B7280;
+  --text-on-ember: #120904;
+
+  /* --- Typographie --- */
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+  --fs-2xs: 0.6875rem;  /* 11px */
+  --fs-xs: 0.75rem;     /* 12px */
+  --fs-sm: 0.875rem;    /* 14px */
+  --fs-base: 1rem;      /* 16px */
+  --fs-lg: 1.125rem;    /* 18px */
+  --fs-xl: 1.375rem;    /* 22px */
+  --fs-2xl: 1.75rem;    /* 28px */
+  --fs-3xl: 2.25rem;    /* 36px */
+
+  /* --- Espacement --- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* --- Rayons --- */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-full: 999px;
+
+  /* --- Ombres --- */
+  --shadow-card: 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -8px rgba(0,0,0,0.5);
+  --shadow-ember: 0 0 0 1px rgba(255,107,53,0.25), 0 8px 32px -4px var(--ember-glow);
+
+  /* --- Layout mobile --- */
+  --nav-height: 64px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --content-max: 560px;
+
+  /* --- Transitions --- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+}
+
+/* Reduced motion : toujours respecté */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

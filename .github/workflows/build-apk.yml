@@ -1,0 +1,53 @@
+name: Générer l'APK Android (TWA)
+
+# Se lance à la main depuis l'onglet "Actions" de GitHub, une fois que la PWA
+# est bien en ligne sur GitHub Pages (voir deploy-pages.yml).
+# pwa_url doit pointer vers cette URL publique, ex :
+# https://<ton-user>.github.io/<ton-repo>/
+on:
+  workflow_dispatch:
+    inputs:
+      pwa_url:
+        description: "URL publique de la PWA (GitHub Pages), avec le / final"
+        required: true
+        default: "https://TON-USER.github.io/TON-REPO/"
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installer le JDK (requis par Bubblewrap/Android)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Installer Bubblewrap CLI
+        run: npm install -g @bubblewrap/cli
+
+      - name: Initialiser le projet Android à partir du manifest de la PWA
+        run: |
+          bubblewrap init \
+            --manifest="${{ github.event.inputs.pwa_url }}manifest.webmanifest" \
+            --directory=twa-project \
+            --skipPwaValidation \
+            <<< $'\n\n\n\n\n\n\n\n\n\n'
+
+      - name: Générer l'APK
+        working-directory: twa-project
+        run: bubblewrap build --skipPwaValidation
+
+      - name: Publier l'APK comme artifact téléchargeable
+        uses: actions/upload-artifact@v4
+        with:
+          name: boost-apk
+          path: |
+            twa-project/app-release-signed.apk
+            twa-project/app-release-unsigned.apk
+          if-no-files-found: warn
