@@ -53,15 +53,24 @@ function itemCard(item, index) {
   return card;
 }
 
-function readerBlock({ title, body, onBack }) {
+function readerBlock({ title, body, onBack, onNext, nextLabel }) {
   const wrap = document.createElement('div');
   wrap.className = 'motivation-reader';
   wrap.innerHTML = `
-    <button type="button" class="back-btn motivation-reader__back">${icons.arrowLeft} Retour</button>
+    <div class="motivation-reader__nav">
+      <button type="button" class="back-btn motivation-reader__back">${icons.arrowLeft} Retour</button>
+      ${onNext ? `<button type="button" class="motivation-reader__next">${nextLabel || 'Suivant'} ${icons.chevronRight}</button>` : ''}
+    </div>
     <h2 class="motivation-reader__title">${title}</h2>
     <p class="motivation-reader__body">${body.replace(/\n\n/g, '</p><p class="motivation-reader__body">').replace(/\n/g, '<br>')}</p>
+    ${onNext ? `<button type="button" class="btn-primary motivation-reader__next-bottom" style="width:100%">${nextLabel || 'Suivant'} ${icons.chevronRight}</button>` : ''}
   `;
   wrap.querySelector('.motivation-reader__back').addEventListener('click', onBack);
+  if (onNext) {
+    wrap.querySelectorAll('.motivation-reader__next, .motivation-reader__next-bottom').forEach((btn) => {
+      btn.addEventListener('click', onNext);
+    });
+  }
   return wrap;
 }
 
@@ -73,12 +82,19 @@ function refreshScreen() {
 
 function renderConfianceTab(screen) {
   if (openScriptId) {
-    const script = confidenceScripts.find((s) => s.id === openScriptId);
+    const idx = confidenceScripts.findIndex((s) => s.id === openScriptId);
+    const script = confidenceScripts[idx];
+    const isLast = idx === confidenceScripts.length - 1;
     screen.innerHTML = '';
     screen.appendChild(readerBlock({
       title: script.title,
       body: script.body,
       onBack: () => { openScriptId = null; refreshScreen(); },
+      onNext: () => {
+        openScriptId = isLast ? confidenceScripts[0].id : confidenceScripts[idx + 1].id;
+        refreshScreen();
+      },
+      nextLabel: isLast ? 'Recommencer' : 'Suivant',
     }));
     return;
   }
@@ -92,14 +108,29 @@ function renderConfianceTab(screen) {
 
 function renderRecueilTab(screen) {
   if (openSectionId) {
-    const section = themeCollection.find((s) => s.id === openSectionId);
+    const sectionIdx = themeCollection.findIndex((s) => s.id === openSectionId);
+    const section = themeCollection[sectionIdx];
     if (openItemIndex !== null) {
       const item = section.items[openItemIndex];
+      const isLastItemInSection = openItemIndex === section.items.length - 1;
+      const isLastSection = sectionIdx === themeCollection.length - 1;
       screen.innerHTML = '';
       screen.appendChild(readerBlock({
         title: item.title,
         body: item.body,
         onBack: () => { openItemIndex = null; refreshScreen(); },
+        onNext: () => {
+          if (!isLastItemInSection) {
+            openItemIndex = openItemIndex + 1;
+          } else {
+            // Fin de section : passe à la section suivante (ou boucle à la première), premier item.
+            const nextSection = isLastSection ? themeCollection[0] : themeCollection[sectionIdx + 1];
+            openSectionId = nextSection.id;
+            openItemIndex = 0;
+          }
+          refreshScreen();
+        },
+        nextLabel: (isLastItemInSection && isLastSection) ? 'Recommencer' : 'Suivant',
       }));
       return;
     }
