@@ -28,16 +28,23 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Installer le SDK Android (déjà présent sur le runner, on force juste les licences)
+        uses: android-actions/setup-android@v3
+
       - name: Installer Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
       - name: Initialiser le projet Android à partir du manifest de la PWA
+        # Comme le JDK (setup-java) et le SDK Android (setup-android) sont déjà
+        # installés par les actions ci-dessus, on répond "No" (n) aux deux
+        # questions d'installation, puis Entrée pour garder toutes les valeurs
+        # par défaut proposées pour le reste des questions (nom du package,
+        # nom de l'appli, couleurs, etc.).
         run: |
-          bubblewrap init \
+          printf 'n\nn\n\n\n\n\n\n\n\n\n\n\n' | bubblewrap init \
             --manifest="${{ github.event.inputs.pwa_url }}manifest.webmanifest" \
             --directory=twa-project \
-            --skipPwaValidation \
-            <<< $'\n\n\n\n\n\n\n\n\n\n'
+            --skipPwaValidation
 
       - name: Générer l'APK
         working-directory: twa-project
