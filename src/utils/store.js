@@ -55,6 +55,14 @@ const defaultState = {
   habits: [], // Habit[]
   dailyReviews: [], // DailyReview[] — un par date (upsert par jour)
   weeklyReviews: [], // WeeklyReview[] — snapshots calculés + victoires/difficultés en texte libre
+  traits: [], // Trait[] — auto-évaluation forces / faiblesses, voir personalDev.js
+  skills: [], // Skill[] — compétences suivies avec niveau, voir personalDev.js
+  businessPlan: {
+    // Sections texte libres, clé = id de businessPlanSections
+    sections: {},
+    updatedAt: null,
+  },
+  businessMilestones: [], // BusinessMilestone[] — jalons "à atteindre / en cours / atteint"
   notificationPrefs: {
     // { [typeId]: { enabled, time } } — voir notificationTypes.js pour la liste des types et heures par défaut.
     morning_boost: { enabled: true, time: '07:00' },
@@ -517,6 +525,125 @@ class Store {
     return this.state.problems
       .slice()
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+
+  // ============================================================
+  // TRAITS — auto-évaluation forces / faiblesses (développement personnel)
+  // ============================================================
+
+  /** fields: { domain, category ('force'|'faiblesse'), note } */
+  addTrait(fields) {
+    const id = uid('tr');
+    const now = new Date().toISOString();
+    const trait = {
+      id,
+      domain: fields.domain?.trim() || 'Sans titre',
+      category: fields.category === 'faiblesse' ? 'faiblesse' : 'force',
+      note: fields.note?.trim() || '',
+      createdAt: now,
+    };
+    this.set({ traits: [trait, ...this.state.traits] });
+    return id;
+  }
+
+  updateTrait(id, patch) {
+    this.set({ traits: this.state.traits.map((t) => (t.id === id ? { ...t, ...patch } : t)) });
+  }
+
+  deleteTrait(id) {
+    this.set({ traits: this.state.traits.filter((t) => t.id !== id) });
+  }
+
+  listTraits() {
+    return this.state.traits.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+
+  // ============================================================
+  // SKILLS — compétences suivies (technique, business, juridique, ...)
+  // ============================================================
+
+  /** fields: { name, category, level (1-5), note } */
+  addSkill(fields) {
+    const id = uid('sk');
+    const now = new Date().toISOString();
+    const skill = {
+      id,
+      name: fields.name?.trim() || 'Sans titre',
+      category: fields.category || 'autre',
+      level: Math.min(5, Math.max(1, Number(fields.level) || 1)),
+      note: fields.note?.trim() || '',
+      createdAt: now,
+      updatedAt: now,
+    };
+    this.set({ skills: [skill, ...this.state.skills] });
+    return id;
+  }
+
+  updateSkill(id, patch) {
+    this.set({
+      skills: this.state.skills.map((s) => (s.id === id ? { ...s, ...patch, updatedAt: new Date().toISOString() } : s)),
+    });
+  }
+
+  deleteSkill(id) {
+    this.set({ skills: this.state.skills.filter((s) => s.id !== id) });
+  }
+
+  listSkills() {
+    return this.state.skills.slice().sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  }
+
+  // ============================================================
+  // BUSINESS PLAN — sections texte + jalons trackés
+  // ============================================================
+
+  updateBusinessPlanSection(sectionId, text) {
+    this.set({
+      businessPlan: {
+        ...this.state.businessPlan,
+        sections: { ...this.state.businessPlan.sections, [sectionId]: text },
+        updatedAt: new Date().toISOString(),
+      },
+    });
+  }
+
+  /** fields: { title, targetDate, status } — status: 'a_atteindre' | 'en_cours' | 'atteint' */
+  addBusinessMilestone(fields) {
+    const id = uid('bm');
+    const now = new Date().toISOString();
+    const milestone = {
+      id,
+      title: fields.title?.trim() || 'Sans titre',
+      targetDate: fields.targetDate || '',
+      status: fields.status || 'a_atteindre',
+      createdAt: now,
+      reachedAt: null,
+    };
+    this.set({ businessMilestones: [milestone, ...this.state.businessMilestones] });
+    return id;
+  }
+
+  updateBusinessMilestone(id, patch) {
+    const m = this.state.businessMilestones.find((x) => x.id === id);
+    if (!m) return;
+    const nowReached = (patch.status ?? m.status) === 'atteint';
+    const wasReached = m.status === 'atteint';
+    this.set({
+      businessMilestones: this.state.businessMilestones.map((x) => (x.id === id ? {
+        ...x,
+        ...patch,
+        reachedAt: nowReached ? (x.reachedAt ?? new Date().toISOString()) : (nowReached === false ? null : x.reachedAt),
+      } : x)),
+    });
+    if (nowReached && !wasReached) this.addXp(25, 'action', `Jalon business atteint : ${m.title}`);
+  }
+
+  deleteBusinessMilestone(id) {
+    this.set({ businessMilestones: this.state.businessMilestones.filter((x) => x.id !== id) });
+  }
+
+  listBusinessMilestones() {
+    return this.state.businessMilestones.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 
   // ============================================================
