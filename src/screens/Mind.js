@@ -4,9 +4,10 @@ import { router } from '../utils/router.js';
 import { moods, moodMap, commonCauses } from '../data/moods.js';
 import { problemStatuses, problemStatusMap, problemImportance, problemImportanceMap } from '../data/problems.js';
 import { leadershipDimensions, emptyLeadershipScores, averageLeadershipScore } from '../data/leadership.js';
+import { Motivation } from './Motivation.js';
 
 // État local de l'écran (pas persisté) : onglet actif + fenêtre de stats + humeur sélectionnée dans le formulaire.
-let activeTab = 'checkin'; // checkin | history | stats | problems | leadership | xp
+let activeTab = 'checkin'; // checkin | history | stats | problems | leadership | xp | motivation
 let statsWindow = 7; // 7 | 30
 let selectedMood = 'neutral';
 let selectedCause = '';
@@ -739,6 +740,7 @@ export function Mind() {
     <button class="tab-btn ${activeTab === 'problems' ? 'is-active' : ''}" data-tab="problems">Problèmes</button>
     <button class="tab-btn ${activeTab === 'leadership' ? 'is-active' : ''}" data-tab="leadership">Leadership</button>
     <button class="tab-btn ${activeTab === 'xp' ? 'is-active' : ''}" data-tab="xp">XP</button>
+    <button class="tab-btn ${activeTab === 'motivation' ? 'is-active' : ''}" data-tab="motivation">Motivation</button>
     <button class="tab-btn" id="mind-coach-tab" style="color:var(--ember-400)">Mon Coach →</button>
   `;
   el.appendChild(tabs);
@@ -753,7 +755,8 @@ export function Mind() {
   else if (activeTab === 'stats') renderStats(screen);
   else if (activeTab === 'problems') renderProblems(screen);
   else if (activeTab === 'leadership') renderLeadership(screen);
-  else renderXp(screen);
+  else if (activeTab === 'xp') renderXp(screen);
+  else screen.appendChild(Motivation());
 
   tabs.querySelector('#mind-coach-tab').addEventListener('click', () => router.navigate('/coach'));
 
