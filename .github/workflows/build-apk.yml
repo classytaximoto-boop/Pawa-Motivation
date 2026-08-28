@@ -34,15 +34,18 @@ jobs:
       - name: Installer Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
-      - name: Initialiser le projet Android à partir du manifest de la PWA
-        # Bubblewrap pose plusieurs questions en mode interactif :
-        # 1) "Installer le JDK ?" -> No (on a déjà JAVA_HOME via setup-java)
-        # 2) "Path to your existing JDK:" -> $JAVA_HOME
-        # 3) "Installer le SDK Android ?" -> No (on a déjà ANDROID_HOME via setup-android)
-        # 4) "Path to your existing Android SDK:" -> $ANDROID_HOME
-        # 5+) le reste des questions (nom de l'appli, package, couleurs...) -> Entrée (valeurs par défaut)
+      - name: Pré-configurer Bubblewrap (JDK + SDK déjà installés, évite les questions interactives)
         run: |
-          printf 'n\n%s\nn\n%s\n\n\n\n\n\n\n\n\n' "$JAVA_HOME" "$ANDROID_HOME" | bubblewrap init \
+          mkdir -p "$HOME/.bubblewrap"
+          printf '{\n  "jdkPath": "%s",\n  "androidSdkPath": "%s"\n}\n' "$JAVA_HOME" "$ANDROID_HOME" > "$HOME/.bubblewrap/config.json"
+          cat "$HOME/.bubblewrap/config.json"
+
+      - name: Initialiser le projet Android à partir du manifest de la PWA
+        # jdkPath et androidSdkPath sont déjà connus via ~/.bubblewrap/config.json
+        # (étape précédente), donc bubblewrap init ne pose plus que les questions
+        # sur l'appli elle-même (nom, package, couleurs...) -> Entrée = valeurs par défaut.
+        run: |
+          printf '\n\n\n\n\n\n\n\n\n\n\n' | bubblewrap init \
             --manifest="${{ github.event.inputs.pwa_url }}manifest.webmanifest" \
             --directory=twa-project \
             --skipPwaValidation
