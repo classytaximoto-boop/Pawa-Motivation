@@ -363,8 +363,34 @@
   line-height: 1.4;
 }
 
-.motivation-reader__back {
+.motivation-reader__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
   margin-bottom: var(--sp-4);
+}
+
+.motivation-reader__back {
+  margin-bottom: 0;
+}
+
+.motivation-reader__next {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--ember-400);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  padding: var(--sp-2);
+}
+
+.motivation-reader__next svg {
+  width: 18px;
+  height: 18px;
 }
 
 .motivation-reader__title {
@@ -379,4 +405,17 @@
   color: var(--text-secondary);
   line-height: 1.65;
   margin-bottom: var(--sp-3);
+}
+
+.motivation-reader__next-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: var(--sp-5);
+}
+
+.motivation-reader__next-bottom svg {
+  width: 18px;
+  height: 18px;
 }
