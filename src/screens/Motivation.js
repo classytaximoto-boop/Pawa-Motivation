@@ -1,5 +1,4 @@
 import { icons } from '../utils/icons.js';
-import { router } from '../utils/router.js';
 import { confidenceScripts, themeCollection } from '../data/motivationContent.js';
 
 // État local de l'écran (pas persisté) : sous-onglet actif + item ouvert.
@@ -18,8 +17,7 @@ function scriptCard(script) {
   `;
   card.addEventListener('click', () => {
     openScriptId = script.id;
-    router.navigate('/mind');
-    renderMotivationInPlace();
+    refreshScreen();
   });
   return card;
 }
