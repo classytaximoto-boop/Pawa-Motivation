@@ -41,6 +41,8 @@ import { MediaForm } from './screens/MediaForm.js';
 import { MediaDetail } from './screens/MediaDetail.js';
 import { VoiceRecorder } from './screens/VoiceRecorder.js';
 import { Coach } from './screens/Coach.js';
+import { EmotionSearch } from './screens/EmotionSearch.js';
+import { Skills } from './screens/Skills.js';
 import { AbandonMode } from './screens/AbandonMode.js';
 import { DifficultExperiencesAnalysis } from './screens/DifficultExperiencesAnalysis.js';
 import { HabitsList } from './screens/HabitsList.js';
@@ -87,6 +89,8 @@ router
   .register('/mind', Mind)
   .register('/mind/experiences-difficiles', DifficultExperiencesAnalysis)
   .register('/coach', Coach)
+  .register('/ressenti', EmotionSearch)
+  .register('/developpement', Skills)
   .register('/abandon', AbandonMode)
   .register('/notes', NotesList)
   .register('/notes/nouveau', NoteForm)
