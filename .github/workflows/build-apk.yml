@@ -41,17 +41,47 @@ jobs:
           cat "$HOME/.bubblewrap/config.json"
 
       - name: Initialiser le projet Android à partir du manifest de la PWA
-        # jdkPath et androidSdkPath sont déjà connus via ~/.bubblewrap/config.json
-        # (étape précédente), donc bubblewrap init ne pose plus que les questions
-        # sur l'appli elle-même (nom, package, couleurs...) -> Entrée = valeurs par défaut.
+        env:
+          # Séquence complète des questions posées par "bubblewrap init"
+          # (JDK/SDK déjà résolus via ~/.bubblewrap/config.json, donc on
+          # commence directement à "Web app details (1/5)") :
+          #  1) Domain              -> Entrée (valeur auto-détectée du manifest)
+          #  2) URL path            -> Entrée (valeur par défaut "/")
+          #  3) Application name    -> Entrée (valeur du manifest)
+          #  4) Short name          -> Entrée
+          #  5) Application ID      -> Entrée
+          #  6) Starting version code -> Entrée (1)
+          #  7) Display mode        -> Entrée (standalone)
+          #  8) Orientation         -> Entrée (default)
+          #  9) Status bar color    -> Entrée
+          # 10) Splash screen color -> Entrée
+          # 11) Icon URL            -> Entrée (valeur du manifest)
+          # 12) Maskable icon URL   -> Entrée (optionnel, vide)
+          # 13) Monochrome icon URL -> Entrée (optionnel, vide)
+          # 14) Play Billing ?      -> n (No)
+          # 15) Geolocation ?       -> n (No)
+          # 16) Key store location  -> Entrée (chemin par défaut proposé)
+          # 17) Key name            -> Entrée (alias par défaut "android")
+          # 18) Create keystore now? -> Y (Yes)
+          # 19) First and Last names -> "BOOST App"
+          # 20) Organizational Unit -> "BOOST"
+          # 21) Organization        -> "BOOST"
+          # 22) Country (2 lettres) -> "MG"
+          # 23) Password Key Store  -> mot de passe (via var d'env plus bas)
+          # 24) Password Key        -> mot de passe (via var d'env plus bas)
+          BUBBLEWRAP_KEYSTORE_PASSWORD: boost-apk-2026
+          BUBBLEWRAP_KEY_PASSWORD: boost-apk-2026
         run: |
-          printf '\n\n\n\n\n\n\n\n\n\n\n' | bubblewrap init \
+          printf '\n\n\n\n\n\n\n\n\n\n\n\n\nn\nn\n\n\nY\nBOOST App\nBOOST\nBOOST\nMG\nboost-apk-2026\nboost-apk-2026\n' | bubblewrap init \
             --manifest="${{ github.event.inputs.pwa_url }}manifest.webmanifest" \
             --directory=twa-project \
             --skipPwaValidation
 
       - name: Générer l'APK
         working-directory: twa-project
+        env:
+          BUBBLEWRAP_KEYSTORE_PASSWORD: boost-apk-2026
+          BUBBLEWRAP_KEY_PASSWORD: boost-apk-2026
         run: bubblewrap build --skipPwaValidation
 
       - name: Publier l'APK comme artifact téléchargeable
