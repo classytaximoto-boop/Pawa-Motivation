@@ -8,6 +8,7 @@ Usage: python3 generate-twa-manifest.py <pwa_url> <output_path>
 import json
 import re
 import sys
+from urllib.parse import urlparse
 
 if len(sys.argv) != 3:
     print("Usage: generate-twa-manifest.py <pwa_url> <output_path>")
@@ -19,7 +20,9 @@ output_path = sys.argv[2]
 if not pwa_url.endswith('/'):
     pwa_url += '/'
 
-host = re.sub(r'^https?://', '', pwa_url).split('/')[0]
+parsed = urlparse(pwa_url)
+host = parsed.netloc
+start_path = parsed.path or '/'
 
 manifest = {
     'packageId': 'org.boost.app.twa',
@@ -34,7 +37,7 @@ manifest = {
     'navigationDividerColorDark': '#000000',
     'backgroundColor': '#0B0D10',
     'enableNotifications': False,
-    'startUrl': '/',
+    'startUrl': start_path,
     'iconUrl': pwa_url + 'icons/icon-512.png',
     'maskableIconUrl': pwa_url + 'icons/icon-512.png',
     'splashScreenFadeOutDuration': 300,
