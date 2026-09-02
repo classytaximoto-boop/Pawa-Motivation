@@ -1,0 +1,11 @@
+/* ============================================================
+   FICHIER DÉSACTIVÉ — anciennes règles dupliquées avec agenda.css.
+   Ce fichier écrasait le nouveau design de l'écran Agenda car ses
+   classes (.agenda-view-tab, .agenda-day-nav, .agenda-slot, etc.)
+   étaient identiques à celles d'agenda.css mais avec l'ancien style
+   plat. Il a été vidé pour ne plus interférer.
+
+   Le style de l'agenda vit désormais uniquement dans agenda.css.
+   Si ce fichier n'est plus importé nulle part après vérification,
+   il peut être supprimé complètement du repo.
+   ============================================================ */
