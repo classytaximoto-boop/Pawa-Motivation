@@ -1,0 +1,716 @@
+/* ============================================================
+   AGENDA — calendrier horaire, historique, toast de félicitations
+   ============================================================ */
+
+.agenda-day-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin: 0 var(--sp-5) var(--sp-4);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+}
+
+.agenda-day-nav__label {
+  font-family: var(--font-display);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--text-primary);
+  text-align: center;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agenda-day-nav .chip {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+}
+
+.agenda-day-nav .chip svg { width: 16px; height: 16px; stroke: currentColor; }
+
+.agenda-view-tabs {
+  display: flex;
+  gap: var(--sp-2);
+  padding: 0 var(--sp-5) var(--sp-4);
+}
+
+.agenda-view-tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  transition: background 0.15s var(--ease-out), border-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
+}
+
+.agenda-view-tab svg { width: 16px; height: 16px; flex: 0 0 auto; stroke: currentColor; }
+
+.agenda-view-tab.is-active {
+  background: var(--ember-500);
+  border-color: var(--ember-500);
+  color: var(--text-on-ember);
+  box-shadow: var(--shadow-ember);
+}
+
+/* ------------------------------------------------------------
+   Timeline continue (positionnement à la minute, façon Google Calendar).
+   ------------------------------------------------------------ */
+
+.agenda-add-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  width: calc(100% - var(--sp-5) * 2);
+  margin: 0 var(--sp-5) var(--sp-4);
+  padding: var(--sp-3) var(--sp-3);
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--ember-500);
+  color: var(--text-on-ember);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  box-shadow: var(--shadow-ember);
+  transition: transform 0.15s var(--ease-out), opacity 0.15s var(--ease-out);
+}
+
+.agenda-add-bar:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.agenda-add-bar svg { width: 17px; height: 17px; stroke: currentColor; }
+
+/* ------------------------------------------------------------
+   Cadre 9 — mini-calendrier mensuel, décalé légèrement vers la gauche.
+   ------------------------------------------------------------ */
+
+.agenda-calendar {
+  margin: 0 var(--sp-5) var(--sp-4);
+  margin-right: calc(var(--sp-5) + var(--sp-2)); /* décale l'ensemble un peu vers la gauche */
+  padding: var(--sp-3);
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.agenda-calendar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.agenda-calendar__head .chip {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+}
+
+.agenda-calendar__head .chip svg { width: 14px; height: 14px; stroke: currentColor; }
+
+.agenda-calendar__month {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--text-primary);
+}
+
+.agenda-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: var(--sp-1);
+}
+
+.agenda-calendar__weekdays span {
+  text-align: center;
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  padding-bottom: var(--sp-1);
+}
+
+.agenda-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.agenda-calendar__cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  position: relative;
+}
+
+.agenda-calendar__cell.is-empty { visibility: hidden; }
+
+.agenda-calendar__cell.has-tasks::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ember-500);
+}
+
+.agenda-calendar__cell.is-today {
+  color: var(--ember-500);
+  font-weight: 700;
+}
+
+.agenda-calendar__cell.is-selected {
+  background: #3b82f6;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.agenda-calendar__cell.is-selected.has-tasks::after {
+  background: #ffffff;
+}
+
+/* ------------------------------------------------------------
+   Cadre 1 — priorités du jour, bandeau pleine largeur en haut.
+   ------------------------------------------------------------ */
+
+.agenda-priority-banner {
+  display: flex;
+  gap: var(--sp-3);
+  margin: 0 var(--sp-5) var(--sp-4);
+  padding: var(--sp-4);
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--ember-500);
+  border-radius: var(--radius-md);
+}
+
+.agenda-priority-banner__icon {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--ember-500) 16%, transparent);
+  color: var(--ember-500);
+}
+
+.agenda-priority-banner__icon svg { width: 18px; height: 18px; stroke: currentColor; fill: currentColor; }
+
+.agenda-priority-banner__body { flex: 1; min-width: 0; }
+
+.agenda-priority-banner__title {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2);
+}
+
+.agenda-priority-banner__empty {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+}
+
+.agenda-priority-banner__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.agenda-priority-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.agenda-priority-item__check {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 2px solid var(--ember-500);
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ember-500);
+}
+
+.agenda-priority-item.is-done .agenda-priority-item__check {
+  background: var(--ember-500);
+  border-color: var(--ember-500);
+  color: var(--text-on-ember);
+}
+
+.agenda-priority-item__check svg { width: 11px; height: 11px; stroke: currentColor; }
+
+.agenda-priority-item__time {
+  flex: 0 0 auto;
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  color: var(--ember-500);
+}
+
+.agenda-priority-item.is-done .agenda-priority-item__time { color: var(--text-tertiary); }
+
+.agenda-priority-item__title {
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agenda-priority-item.is-done .agenda-priority-item__title {
+  color: var(--text-tertiary);
+  text-decoration: line-through;
+  text-decoration-color: var(--border-strong);
+}
+
+/* Toggle "tâche prioritaire" dans le formulaire */
+.agenda-priority-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  cursor: pointer;
+}
+
+.agenda-priority-toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.agenda-priority-toggle__box {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--border-strong);
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: border-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
+}
+
+.agenda-priority-toggle__box svg { width: 12px; height: 12px; stroke: currentColor; fill: currentColor; }
+
+.agenda-priority-toggle input:checked + .agenda-priority-toggle__box {
+  border-color: var(--ember-500);
+  color: var(--ember-500);
+}
+
+.agenda-priority-toggle__label {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+
+/* ------------------------------------------------------------
+   Cadres 2-7 — grille 2 colonnes des tâches du jour.
+   ------------------------------------------------------------ */
+
+.agenda-task-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  margin: 0 var(--sp-5) var(--sp-4);
+}
+
+@media (max-width: 380px) {
+  .agenda-task-grid { grid-template-columns: 1fr; }
+}
+
+.agenda-block {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  background: color-mix(in srgb, var(--ember-500) 14%, var(--bg-surface));
+  border: 1px solid var(--ember-500);
+  border-left: 3px solid var(--ember-500);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-3) var(--sp-3);
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  min-height: 76px;
+}
+
+.agenda-block.is-priority {
+  border-color: #3b82f6;
+  border-left-color: #3b82f6;
+  background: color-mix(in srgb, #3b82f6 14%, var(--bg-surface));
+}
+
+.agenda-block.is-done {
+  background: var(--bg-surface);
+  border-color: var(--border-strong);
+  border-left-color: var(--border-strong);
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.agenda-block__check {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--ember-500);
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  color: var(--ember-500);
+}
+
+.agenda-block.is-done .agenda-block__check {
+  background: var(--ember-500);
+  border-color: var(--ember-500);
+  color: var(--text-on-ember);
+}
+
+.agenda-block__check svg { width: 12px; height: 12px; stroke: currentColor; }
+
+.agenda-block__body { flex: 1; min-width: 0; }
+
+.agenda-block__time {
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  color: var(--ember-500);
+  line-height: 1.2;
+}
+
+.agenda-block.is-done .agenda-block__time {
+  color: var(--text-tertiary);
+}
+
+.agenda-block__title {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.agenda-block__title svg { width: 12px; height: 12px; stroke: currentColor; fill: currentColor; flex: 0 0 auto; color: var(--ember-500); }
+
+.agenda-block.is-done .agenda-block__title {
+  color: var(--text-tertiary);
+  text-decoration: line-through;
+  text-decoration-color: var(--border-strong);
+}
+
+.agenda-block__note {
+  font-size: var(--fs-2xs);
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.agenda-block__actions {
+  flex: 0 0 auto;
+  display: flex;
+  gap: var(--sp-1);
+}
+
+.agenda-block__edit,
+.agenda-block__delete {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+}
+
+.agenda-block__delete:active { color: var(--danger-500); }
+.agenda-block__edit:active { color: var(--ember-500); }
+
+.agenda-block__edit svg,
+.agenda-block__delete svg { width: 13px; height: 13px; stroke: currentColor; }
+
+.agenda-time-range {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.agenda-time-range .form-input { flex: 1; min-width: 0; }
+
+.agenda-time-range__sep {
+  flex: 0 0 auto;
+  color: var(--text-tertiary);
+}
+
+.agenda-form-error {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--danger-500);
+}
+
+.agenda-add-form {
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--ember-500);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  margin: 0 var(--sp-5) var(--sp-4);
+  box-shadow: var(--shadow-ember);
+}
+
+.agenda-search {
+  position: relative;
+  padding: 0 var(--sp-5) var(--sp-4);
+}
+
+.agenda-search__icon {
+  position: absolute;
+  left: calc(var(--sp-5) + var(--sp-3));
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.agenda-search__icon svg { width: 16px; height: 16px; stroke: currentColor; }
+
+.agenda-search .form-input {
+  padding-left: calc(var(--sp-3) * 2 + 16px);
+  border-radius: var(--radius-full);
+  background: var(--bg-surface-raised);
+}
+
+.agenda-history-list { padding: 0 var(--sp-5); }
+
+.agenda-history__date {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  margin: var(--sp-5) 0 var(--sp-2);
+}
+
+.agenda-history__date svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+}
+
+.agenda-history-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  margin-bottom: var(--sp-2);
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.agenda-history-item.is-done {
+  opacity: 0.6;
+}
+
+.agenda-history-item__hour {
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ember-500);
+  background: color-mix(in srgb, var(--ember-500) 14%, transparent);
+  padding: 3px var(--sp-2);
+  border-radius: var(--radius-sm);
+}
+
+.agenda-history-item.is-done .agenda-history-item__hour {
+  color: var(--text-tertiary);
+  background: transparent;
+}
+
+.agenda-history-item__title {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.agenda-history-item.is-done .agenda-history-item__title {
+  color: var(--text-tertiary);
+  text-decoration: line-through;
+  text-decoration-color: var(--border-strong);
+}
+
+.agenda-history-item .chip svg { width: 12px; height: 12px; }
+
+/* Toast de félicitations flottant, en bas de l'écran */
+.agenda-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--nav-height, 64px) + var(--sp-4));
+  transform: translate(-50%, 16px);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--ember-500);
+  border-radius: var(--radius-md);
+  padding: var(--sp-3) var(--sp-4);
+  box-shadow: var(--shadow-ember);
+  max-width: calc(100vw - var(--sp-6));
+  z-index: 1000;
+  transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+}
+
+.agenda-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.agenda-toast__icon {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ember-500);
+}
+
+.agenda-toast__icon svg { width: 22px; height: 22px; stroke: currentColor; }
+
+.agenda-toast__msg {
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.agenda-toast__xp {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ember-500);
+  margin-top: 2px;
+}
+
+/* ------------------------------------------------------------
+   Cadre 8 — accomplissements du jour et motivation, bandeau pleine largeur.
+   ------------------------------------------------------------ */
+
+.agenda-summary-card {
+  display: flex;
+  gap: var(--sp-3);
+  margin: 0 var(--sp-5) var(--sp-5);
+  padding: var(--sp-4);
+  background: var(--bg-surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.agenda-summary-card__icon {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--ember-500) 16%, transparent);
+  color: var(--ember-500);
+}
+
+.agenda-summary-card__icon svg { width: 20px; height: 20px; stroke: currentColor; }
+
+.agenda-summary-card__body { flex: 1; min-width: 0; }
+
+.agenda-summary-card__title {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2);
+}
+
+.agenda-summary-card__stats {
+  display: flex;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-2);
+}
+
+.agenda-summary-card__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+
+.agenda-summary-card__stat strong {
+  color: var(--text-primary);
+  font-size: var(--fs-sm);
+}
+
+.agenda-summary-card__stat svg { width: 13px; height: 13px; stroke: currentColor; color: var(--ember-500); }
+
+.agenda-summary-card__bar {
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  overflow: hidden;
+  margin-bottom: var(--sp-2);
+}
+
+.agenda-summary-card__bar-fill {
+  height: 100%;
+  background: var(--ember-500);
+  border-radius: var(--radius-full);
+  transition: width 0.3s var(--ease-out);
+}
+
+.agenda-summary-card__msg {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
