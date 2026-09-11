@@ -1,0 +1,772 @@
+/* ============================================================
+   PAWA BELOHA — palette et style dédiés à cet onglet, reproduisant
+   fidèlement l'image de référence (bleu comme accent principal, vert
+   pour validation/succès, couleurs distinctes par catégorie). Variables
+   scoped à .pawa-beloha-screen pour ne jamais affecter le reste de
+   l'app (qui garde --ember-500 comme accent global dans tokens.css).
+   ============================================================ */
+
+.pawa-beloha-screen {
+  --pb-blue: #2F6FE8;
+  --pb-blue-dark: #1B4FBF;
+  --pb-blue-soft: rgba(47, 111, 232, 0.12);
+  --pb-green: #2FB463;
+  --pb-green-soft: rgba(47, 180, 99, 0.14);
+  --pb-surface: var(--bg-surface);
+  --pb-surface-alt: var(--bg-surface-raised);
+  --pb-text: var(--text-primary);
+  --pb-text-dim: var(--text-secondary);
+  --pb-text-faint: var(--text-tertiary);
+  --pb-border: var(--border-subtle);
+  --pb-radius-card: 20px;
+  --pb-radius-pill: 999px;
+  --pb-radius-box: 10px;
+
+  --pb-cat-blue: #2F6FE8;
+  --pb-cat-blue-bg: rgba(47, 111, 232, 0.12);
+  --pb-cat-orange: #E8821E;
+  --pb-cat-orange-bg: rgba(232, 130, 30, 0.14);
+  --pb-cat-violet: #7C4FE0;
+  --pb-cat-violet-bg: rgba(124, 79, 224, 0.14);
+  --pb-cat-cyan: #1FB3C4;
+  --pb-cat-cyan-bg: rgba(31, 179, 196, 0.14);
+  --pb-cat-red: #E8543D;
+  --pb-cat-red-bg: rgba(232, 84, 61, 0.14);
+  --pb-cat-slate: #6B7787;
+  --pb-cat-slate-bg: rgba(107, 119, 135, 0.16);
+  --pb-cat-indigo: #5A5FE0;
+  --pb-cat-indigo-bg: rgba(90, 95, 224, 0.14);
+
+  min-height: 100%;
+}
+
+/* Sehatra 1 — Écran d'accueil */
+.pawa-beloha-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--sp-10) var(--sp-5) var(--sp-6);
+  min-height: 78vh;
+  justify-content: center;
+  border-radius: var(--pb-radius-card);
+  position: relative;
+  overflow: hidden;
+  /* Photo Unsplash "the silhouette of a mountain range at sunset" par Marek
+     Piwnicki — Free to use under the Unsplash License (unsplash.com/license).
+     Overlay sombre superposé pour garder le texte blanc lisible, comme dans
+     l'image de référence. Source : https://unsplash.com/photos/3yl7UjGj4ko */
+  background:
+    linear-gradient(180deg, rgba(8, 14, 24, 0.35) 0%, rgba(8, 14, 24, 0.55) 55%, rgba(6, 10, 18, 0.88) 100%),
+    url('https://images.unsplash.com/photo-1700771266232-7a31af68eb31?fm=jpg&q=70&w=1200&auto=format&fit=crop') center 30% / cover no-repeat;
+  color: #fff;
+}
+
+.pawa-beloha-hero__hiker {
+  position: absolute;
+  bottom: 32%;
+  right: 18%;
+  width: 34px;
+  height: 34px;
+  opacity: 0.9;
+  color: #0a121f;
+  pointer-events: none;
+}
+
+.pawa-beloha-hero__hiker svg { width: 100%; height: 100%; }
+
+.pawa-beloha-hero__logo {
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  background: #fff;
+  color: var(--pb-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--sp-5);
+  box-shadow: 0 8px 28px -6px rgba(0, 0, 0, 0.5);
+}
+
+.pawa-beloha-hero__logo svg { width: 40px; height: 40px; stroke-width: 2.4; }
+
+.pawa-beloha-hero__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.pawa-beloha-hero__subtitle {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.65);
+  margin-top: var(--sp-1);
+}
+
+.pawa-beloha-hero__slogan {
+  margin-top: var(--sp-8);
+  font-size: var(--fs-base);
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.pawa-beloha-hero__cta {
+  margin-top: var(--sp-8);
+  width: 100%;
+  max-width: 320px;
+  background: var(--pb-blue);
+  border-color: var(--pb-blue);
+  border-radius: var(--pb-radius-pill);
+  color: #fff;
+  font-weight: 700;
+  padding: var(--sp-3) var(--sp-5);
+}
+
+.pawa-beloha-hero__tagline {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Bandeau de features — rangée horizontale swipable sous le hero (accueil).
+   Scroll tactile natif (-webkit-overflow-scrolling touch pour iOS), snap par
+   carte pour un défilement propre, scrollbar masquée. Purement informatif :
+   aucune carte n'est cliquable ni ne navigue ailleurs. */
+.pawa-beloha-features {
+  display: flex;
+  gap: var(--sp-3);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--sp-4) var(--sp-4) var(--sp-5);
+  scrollbar-width: none;
+}
+
+.pawa-beloha-features::-webkit-scrollbar { display: none; }
+
+.pawa-beloha-feature-card {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 128px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border-radius: var(--pb-radius-card);
+  background: var(--pb-surface);
+  border: 1px solid var(--pb-border);
+}
+
+.pawa-beloha-feature-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--pb-radius-pill);
+  background: var(--pb-blue-soft);
+  color: var(--pb-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pawa-beloha-feature-card__icon svg { width: 20px; height: 20px; }
+
+.pawa-beloha-feature-card__title {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--pb-text);
+}
+
+.pawa-beloha-feature-card__desc {
+  font-size: var(--fs-xs);
+  color: var(--pb-text-dim);
+  line-height: 1.35;
+}
+
+/* Sehatra 2 — Sélection de catégorie */
+.pawa-beloha-cat-header {
+  text-align: center;
+  padding: var(--sp-2) 0 var(--sp-3);
+}
+
+.pawa-beloha-cat-header__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--pb-text);
+}
+
+.pawa-beloha-cat-header__subtitle {
+  font-size: var(--fs-sm);
+  color: var(--pb-text-faint);
+  margin-top: var(--sp-1);
+}
+
+.pawa-beloha-cat-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+
+.pawa-beloha-cat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border-radius: var(--pb-radius-card);
+  border: 1px solid var(--pb-border);
+  background: var(--pb-surface);
+  text-align: left;
+  width: 100%;
+}
+
+.pawa-beloha-cat-row--add { border-style: dashed; }
+
+.pawa-beloha-cat-row__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  background: var(--pb-surface-alt);
+  color: var(--pb-text-dim);
+}
+
+.pawa-beloha-cat-row__icon svg { width: 22px; height: 22px; stroke-width: 2.1; }
+
+.pawa-beloha-cat-row__icon--blue   { background: var(--pb-cat-blue-bg);   color: var(--pb-cat-blue); }
+.pawa-beloha-cat-row__icon--orange { background: var(--pb-cat-orange-bg); color: var(--pb-cat-orange); }
+.pawa-beloha-cat-row__icon--violet { background: var(--pb-cat-violet-bg); color: var(--pb-cat-violet); }
+.pawa-beloha-cat-row__icon--cyan   { background: var(--pb-cat-cyan-bg);   color: var(--pb-cat-cyan); }
+.pawa-beloha-cat-row__icon--red    { background: var(--pb-cat-red-bg);    color: var(--pb-cat-red); }
+.pawa-beloha-cat-row__icon--slate  { background: var(--pb-cat-slate-bg);  color: var(--pb-cat-slate); }
+.pawa-beloha-cat-row__icon--indigo { background: var(--pb-cat-indigo-bg); color: var(--pb-cat-indigo); }
+
+.pawa-beloha-cat-row__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pawa-beloha-cat-row__label {
+  font-weight: 700;
+  font-size: var(--fs-base);
+  color: var(--pb-text);
+}
+
+.pawa-beloha-cat-row__hint {
+  font-size: var(--fs-xs);
+  color: var(--pb-text-faint);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pawa-beloha-cat-row__chevron {
+  color: var(--pb-text-faint);
+  flex-shrink: 0;
+}
+
+/* Sehatra 3 — Checklist + stepper */
+.pawa-beloha-checklist-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) 0 var(--sp-3);
+}
+
+.pawa-beloha-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--pb-radius-pill);
+  background: var(--pb-surface-alt);
+  border: 1px solid var(--pb-border);
+  color: var(--pb-text);
+  flex-shrink: 0;
+}
+
+.pawa-beloha-back svg { width: 20px; height: 20px; stroke-width: 2.3; }
+
+.pawa-beloha-checklist-header__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  flex-shrink: 0;
+}
+
+.pawa-beloha-checklist-header__icon svg { width: 18px; height: 18px; stroke-width: 2.1; }
+
+.pawa-beloha-checklist-header__icon--blue   { background: var(--pb-cat-blue-bg);   color: var(--pb-cat-blue); }
+.pawa-beloha-checklist-header__icon--orange { background: var(--pb-cat-orange-bg); color: var(--pb-cat-orange); }
+.pawa-beloha-checklist-header__icon--violet { background: var(--pb-cat-violet-bg); color: var(--pb-cat-violet); }
+.pawa-beloha-checklist-header__icon--cyan   { background: var(--pb-cat-cyan-bg);   color: var(--pb-cat-cyan); }
+.pawa-beloha-checklist-header__icon--red    { background: var(--pb-cat-red-bg);    color: var(--pb-cat-red); }
+.pawa-beloha-checklist-header__icon--slate  { background: var(--pb-cat-slate-bg);  color: var(--pb-cat-slate); }
+.pawa-beloha-checklist-header__icon--indigo { background: var(--pb-cat-indigo-bg); color: var(--pb-cat-indigo); }
+
+.pawa-beloha-checklist-header__title {
+  font-weight: 700;
+  font-size: var(--fs-lg);
+  color: var(--pb-text);
+}
+
+.pawa-beloha-stepper {
+  display: flex;
+  align-items: center;
+  padding: var(--sp-3) var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.pawa-beloha-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  flex-shrink: 0;
+}
+
+.pawa-beloha-step__num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--pb-radius-pill);
+  background: var(--pb-surface);
+  border: 2px solid var(--pb-border);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--pb-text-faint);
+}
+
+.pawa-beloha-step.is-active .pawa-beloha-step__num {
+  background: var(--pb-blue);
+  border-color: var(--pb-blue);
+  color: #fff;
+}
+
+.pawa-beloha-step.is-past .pawa-beloha-step__num {
+  background: var(--pb-green);
+  border-color: var(--pb-green);
+  color: #fff;
+}
+
+.pawa-beloha-step.is-past .pawa-beloha-step__num svg { width: 14px; height: 14px; }
+
+.pawa-beloha-step__label {
+  font-size: var(--fs-2xs);
+  color: var(--pb-text-faint);
+}
+
+.pawa-beloha-step.is-active .pawa-beloha-step__label {
+  color: var(--pb-blue);
+  font-weight: 700;
+}
+
+.pawa-beloha-step.is-past .pawa-beloha-step__label {
+  color: var(--pb-green);
+  font-weight: 600;
+}
+
+.pawa-beloha-step__sep {
+  flex: 1;
+  height: 2px;
+  background: var(--pb-border);
+  margin: 0 var(--sp-1);
+  margin-bottom: 20px;
+}
+
+.pawa-beloha-step__sep.is-past { background: var(--pb-green); }
+
+.pawa-beloha-step-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: var(--fs-base);
+  margin-bottom: var(--sp-2);
+  color: var(--pb-text);
+}
+
+.pawa-beloha-step-title__icon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--sp-1);
+  color: var(--pb-blue);
+  vertical-align: -3px;
+}
+
+.pawa-beloha-step-title__icon svg { width: 18px; height: 18px; }
+
+.pawa-beloha-step-title .mono {
+  color: var(--pb-text-dim);
+  font-weight: 600;
+}
+
+.pawa-beloha-empty {
+  font-size: var(--fs-sm);
+  color: var(--pb-text-faint);
+  padding: var(--sp-2) 0;
+}
+
+.pawa-beloha-check-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.pawa-beloha-check-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+}
+
+.pawa-beloha-check-row__box-btn {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.pawa-beloha-check-row__box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--pb-radius-box);
+  border: 2px solid var(--pb-border);
+  background: var(--pb-surface);
+  flex-shrink: 0;
+}
+
+.pawa-beloha-check-row__box svg { width: 15px; height: 15px; stroke-width: 3; }
+
+.pawa-beloha-check-row.is-checked .pawa-beloha-check-row__box {
+  background: var(--pb-green);
+  border-color: var(--pb-green);
+  color: #fff;
+}
+
+.pawa-beloha-check-row__title {
+  font-size: var(--fs-base);
+  color: var(--pb-text);
+  flex: 1;
+}
+
+.pawa-beloha-check-row.is-checked .pawa-beloha-check-row__title { color: var(--pb-text-dim); }
+
+.pawa-beloha-item-row__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  flex-shrink: 0;
+}
+
+.pawa-beloha-inline-form {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.pawa-beloha-inline-form .form-input { flex: 1; }
+
+.pawa-beloha-next-btn {
+  width: 100%;
+  margin-top: var(--sp-4);
+  background: var(--pb-blue);
+  border-color: var(--pb-blue);
+  border-radius: var(--pb-radius-pill);
+  color: #fff;
+  font-weight: 700;
+  padding: var(--sp-3);
+}
+
+/* Sehatra 4 — Rapport */
+.pawa-beloha-success {
+  text-align: center;
+  padding: var(--sp-4) var(--sp-2);
+  position: relative;
+}
+
+.pawa-beloha-success__confetti {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 140px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pawa-beloha-success__confetti span {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  opacity: 0.85;
+}
+
+.pawa-beloha-success__icon-wrap {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto var(--sp-3);
+  border-radius: var(--pb-radius-pill);
+  background: var(--pb-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.pawa-beloha-success__icon-wrap svg { width: 46px; height: 46px; stroke-width: 3; color: #fff; }
+
+.pawa-beloha-success__title {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  color: var(--pb-text);
+}
+
+.pawa-beloha-success__subtitle {
+  color: var(--pb-text-dim);
+  margin-top: var(--sp-1);
+  font-weight: 600;
+}
+
+.pawa-beloha-success__subtitle-cat {
+  color: var(--pb-text-faint);
+  font-size: var(--fs-sm);
+}
+
+.pawa-beloha-success__badge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--pb-radius-card);
+  background: var(--pb-green-soft);
+}
+
+.pawa-beloha-success__badge-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.pawa-beloha-success__badge-count {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  color: var(--pb-text);
+}
+
+.pawa-beloha-success__badge-label {
+  font-size: var(--fs-xs);
+  color: var(--pb-text-dim);
+}
+
+.pawa-beloha-success__badge-valid {
+  background: var(--pb-green);
+  color: #fff;
+  border-color: var(--pb-green);
+  border-radius: var(--pb-radius-pill);
+  font-weight: 700;
+  padding: var(--sp-2) var(--sp-3);
+}
+
+.pawa-beloha-report-list {
+  margin-top: var(--sp-4);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.pawa-beloha-report-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.pawa-beloha-report-row__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--pb-surface-alt);
+  color: var(--pb-text-faint);
+  flex-shrink: 0;
+}
+
+.pawa-beloha-report-row__icon svg { width: 16px; height: 16px; }
+
+.pawa-beloha-report-row__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.pawa-beloha-report-row__label {
+  font-size: var(--fs-xs);
+  color: var(--pb-text-faint);
+}
+
+.pawa-beloha-report-row__value {
+  font-size: var(--fs-base);
+  font-weight: 600;
+  color: var(--pb-text);
+}
+
+.pawa-beloha-remarks-card {
+  margin-top: var(--sp-3);
+  text-align: left;
+  padding: var(--sp-3);
+  border-radius: var(--pb-radius-card);
+  background: var(--pb-surface-alt);
+}
+
+.pawa-beloha-remarks-card__label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--pb-text-faint);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pawa-beloha-remarks-card__label svg { width: 15px; height: 15px; }
+
+.pawa-beloha-remarks-card__value {
+  margin-top: var(--sp-1);
+  font-size: var(--fs-sm);
+  color: var(--pb-text-dim);
+}
+
+.pawa-beloha-report-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+
+.pawa-beloha-report-actions__main {
+  flex: 1;
+  background: transparent;
+  border: 2px solid var(--pb-blue);
+  color: var(--pb-blue);
+  border-radius: var(--pb-radius-pill);
+  font-weight: 700;
+  padding: var(--sp-3);
+}
+
+.pawa-beloha-report-actions__share {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: var(--pb-radius-pill);
+  border: 1px solid var(--pb-border);
+  background: var(--pb-surface);
+  color: var(--pb-text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pawa-beloha-report-actions__share svg { width: 18px; height: 18px; }
+
+.pawa-beloha-rapport-form { text-align: left; }
+
+.pawa-beloha-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.pawa-beloha-header__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--pb-radius-box);
+  background: var(--pb-blue-soft);
+  color: var(--pb-blue);
+  flex-shrink: 0;
+}
+
+.pawa-beloha-header__icon svg { width: 16px; height: 16px; }
+
+.pawa-beloha-header__title {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--pb-text);
+}
+
+/* Sehatra "préparation" — écran dédié à la construction de la liste d'items
+   d'une étape (Avant/Pendant/Après), affiché AVANT le stepper de vérification
+   (cocher) de cette étape. Réutilise .pawa-beloha-check-list pour la liste
+   déjà saisie (sans les cases à cocher, juste titre + actions), et l'affiche
+   au-dessus du formulaire d'ajout, toujours visible (pas de bouton "+" à
+   cliquer d'abord — cf. .pawa-beloha-checklist-header pour l'entête).
+   Le bouton "Confirmer" est désactivé tant que la liste est vide, pour éviter
+   d'ouvrir un stepper de vérification sans rien à cocher. */
+.pawa-beloha-prep-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: var(--fs-base);
+  color: var(--pb-text);
+  margin: var(--sp-4) 0 var(--sp-2);
+}
+
+.pawa-beloha-prep-title__icon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.pawa-beloha-prep-title__icon svg { width: 18px; height: 18px; }
+
+.pawa-beloha-prep-hint {
+  font-size: var(--fs-xs);
+  color: var(--pb-text-dim);
+  margin-bottom: var(--sp-3);
+}
+
+.pawa-beloha-prep-form {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+
+.pawa-beloha-prep-form .form-input { flex: 1; }
+
+.pawa-beloha-confirm-btn {
+  width: 100%;
+  margin-top: var(--sp-4);
+}
+
+.pawa-beloha-confirm-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

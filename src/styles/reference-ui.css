@@ -1,0 +1,412 @@
+/* ============================================================
+   PAWA MOTIVATION — REFERENCE UI SYSTEM
+   Global visual language inspired by the Home/Dashboard reference.
+   Agenda and Pawa Beloha are intentionally excluded by main.js.
+   This file changes presentation only; it does not change data logic.
+   ============================================================ */
+
+#app.reference-theme,
+#app.reference-theme #screen-root {
+  --ref-bg: #0A0E1A;
+  --ref-bg-2: #0D1220;
+  --ref-panel: rgba(20, 26, 44, .78);
+  --ref-panel-solid: #131A2C;
+  --ref-panel-raised: #171F35;
+  --ref-border: rgba(255,255,255,.085);
+  --ref-border-strong: rgba(255,255,255,.15);
+  --ref-text: #F4F6FB;
+  --ref-muted: #9AA3B8;
+  --ref-faint: #6C7690;
+  --ref-yellow: #F5B93D;
+  --ref-blue: #3D9BE9;
+  --ref-blue-light: #6BB4EE;
+  --ref-green: #3ECF8E;
+  --ref-purple: #9B7BF0;
+  --ref-pink: #F0609B;
+  --ref-cyan: #38C4D8;
+  --ref-radius: 18px;
+  --ref-radius-sm: 12px;
+
+  background:
+    radial-gradient(ellipse 650px 420px at 5% 0%, rgba(61,155,233,.09), transparent 65%),
+    radial-gradient(ellipse 600px 420px at 100% 100%, rgba(155,123,240,.08), transparent 65%),
+    linear-gradient(180deg, var(--ref-bg-2), var(--ref-bg));
+  color: var(--ref-text);
+}
+
+#app.reference-theme {
+  background:
+    radial-gradient(ellipse 700px 500px at 0% 0%, rgba(61,155,233,.07), transparent 62%),
+    linear-gradient(180deg, var(--ref-bg-2) 0%, var(--ref-bg) 100%);
+  max-width: 560px;
+}
+
+/* Keep the reference system dark even if the user's general app theme is light. */
+#app.reference-theme,
+#app.reference-theme #screen-root,
+#app.reference-theme .screen {
+  color-scheme: dark;
+}
+
+#app.reference-theme .screen {
+  padding-top: 4px;
+  gap: 18px;
+}
+
+/* ---------------- TYPOGRAPHY ---------------- */
+#app.reference-theme h1,
+#app.reference-theme h2,
+#app.reference-theme h3,
+#app.reference-theme h4,
+#app.reference-theme .screen-title-row h1,
+#app.reference-theme .detail-title {
+  color: var(--ref-text);
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: -.025em;
+}
+
+#app.reference-theme p,
+#app.reference-theme label,
+#app.reference-theme span,
+#app.reference-theme li,
+#app.reference-theme input,
+#app.reference-theme textarea,
+#app.reference-theme select,
+#app.reference-theme button {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+#app.reference-theme .screen-title-row {
+  padding: 8px 2px 2px;
+}
+
+#app.reference-theme .screen-title-row h1 {
+  font-size: 26px;
+}
+
+#app.reference-theme .detail-desc,
+#app.reference-theme .state-block__desc,
+#app.reference-theme .mind-disclaimer {
+  color: var(--ref-muted) !important;
+  line-height: 1.55;
+}
+
+#app.reference-theme .card__label,
+#app.reference-theme .form-label,
+#app.reference-theme .detail-meta-item__label,
+#app.reference-theme .stat-tile__label {
+  color: var(--ref-muted);
+}
+
+/* ---------------- SURFACES / CARDS ---------------- */
+#app.reference-theme .card,
+#app.reference-theme .quote-card,
+#app.reference-theme .media-player,
+#app.reference-theme .stat-tile,
+#app.reference-theme .mission-item,
+#app.reference-theme .goal-card,
+#app.reference-theme .project-card,
+#app.reference-theme .note-card,
+#app.reference-theme .secret-card,
+#app.reference-theme .habit-card,
+#app.reference-theme .skill-card,
+#app.reference-theme .money-tool-card,
+#app.reference-theme .money-summary-card,
+#app.reference-theme .account-card,
+#app.reference-theme .transaction-card,
+#app.reference-theme .debt-card,
+#app.reference-theme .budget-card,
+#app.reference-theme .family-card,
+#app.reference-theme .report-card,
+#app.reference-theme .coach-bubble,
+#app.reference-theme .boost-card,
+#app.reference-theme .next-action,
+#app.reference-theme .why-card,
+#app.reference-theme .state-block {
+  background: linear-gradient(145deg, rgba(23,31,53,.90), rgba(13,18,32,.92)) !important;
+  border: 1px solid var(--ref-border) !important;
+  border-radius: var(--ref-radius) !important;
+  box-shadow: 0 10px 30px -18px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+#app.reference-theme .card:hover,
+#app.reference-theme .goal-card:hover,
+#app.reference-theme .project-card:hover,
+#app.reference-theme .money-tool-card:hover,
+#app.reference-theme .mission-item:hover {
+  border-color: var(--ref-border-strong) !important;
+  background: linear-gradient(145deg, rgba(27,36,61,.95), rgba(15,21,37,.95)) !important;
+}
+
+#app.reference-theme .quote-card {
+  position: relative;
+  overflow: hidden;
+}
+
+#app.reference-theme .quote-card::after {
+  background: radial-gradient(circle, rgba(155,123,240,.18), transparent 70%);
+}
+
+#app.reference-theme .quote-card__text {
+  color: var(--ref-text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+}
+
+#app.reference-theme .quote-card__author { color: var(--ref-muted); }
+
+/* ---------------- BUTTONS ---------------- */
+#app.reference-theme .btn-primary {
+  background: linear-gradient(135deg, var(--ref-blue), #6B5CE9) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 24px -8px rgba(61,155,233,.55);
+  min-height: 44px;
+}
+
+#app.reference-theme .btn-primary:active { transform: translateY(1px) scale(.985); }
+
+#app.reference-theme .btn-secondary,
+#app.reference-theme .btn-danger {
+  border-radius: 14px !important;
+  min-height: 44px;
+}
+
+#app.reference-theme .btn-secondary {
+  background: rgba(255,255,255,.045) !important;
+  border: 1px solid var(--ref-border) !important;
+  color: var(--ref-text) !important;
+}
+
+#app.reference-theme .btn-danger {
+  background: linear-gradient(135deg, #E9484A, #C93662) !important;
+}
+
+#app.reference-theme .back-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,.045);
+  border: 1px solid var(--ref-border);
+  color: var(--ref-text);
+}
+
+/* ---------------- FORMS ---------------- */
+#app.reference-theme .form-input,
+#app.reference-theme .form-textarea,
+#app.reference-theme .form-select,
+#app.reference-theme input[type="text"],
+#app.reference-theme input[type="number"],
+#app.reference-theme input[type="date"],
+#app.reference-theme input[type="time"],
+#app.reference-theme input[type="password"],
+#app.reference-theme select,
+#app.reference-theme textarea {
+  background: rgba(8,13,25,.78) !important;
+  color: var(--ref-text) !important;
+  border: 1px solid var(--ref-border) !important;
+  border-radius: 13px !important;
+  min-height: 44px;
+}
+
+#app.reference-theme .form-input:focus,
+#app.reference-theme .form-textarea:focus,
+#app.reference-theme .form-select:focus,
+#app.reference-theme input:focus,
+#app.reference-theme select:focus,
+#app.reference-theme textarea:focus {
+  border-color: rgba(61,155,233,.75) !important;
+  box-shadow: 0 0 0 3px rgba(61,155,233,.12) !important;
+  outline: none;
+}
+
+#app.reference-theme input::placeholder,
+#app.reference-theme textarea::placeholder { color: var(--ref-faint) !important; }
+
+/* ---------------- TABS / FILTERS ---------------- */
+#app.reference-theme .tab-row,
+#app.reference-theme .mind-tab-row,
+#app.reference-theme .category-scroll,
+#app.reference-theme .money-quicklinks-row {
+  gap: 8px;
+  scrollbar-width: none;
+}
+
+#app.reference-theme .tab-btn,
+#app.reference-theme .category-chip,
+#app.reference-theme .chip,
+#app.reference-theme .money-quicklink {
+  background: rgba(255,255,255,.045) !important;
+  border: 1px solid var(--ref-border) !important;
+  color: var(--ref-muted) !important;
+  border-radius: 999px !important;
+  transition: .18s ease;
+}
+
+#app.reference-theme .tab-btn.is-active,
+#app.reference-theme .category-chip.is-active,
+#app.reference-theme .chip.is-active {
+  background: linear-gradient(135deg, rgba(61,155,233,.24), rgba(155,123,240,.25)) !important;
+  border-color: rgba(61,155,233,.48) !important;
+  color: #fff !important;
+  box-shadow: 0 5px 18px -10px rgba(61,155,233,.75);
+}
+
+/* ---------------- PROGRESS ---------------- */
+#app.reference-theme .progress-track,
+#app.reference-theme .metric-card__track {
+  background: rgba(255,255,255,.08) !important;
+  border-radius: 999px;
+}
+
+#app.reference-theme .progress-fill {
+  background: linear-gradient(90deg, var(--ref-blue), var(--ref-purple)) !important;
+}
+
+/* ---------------- ICON LANGUAGE ---------------- */
+#app.reference-theme .money-tool-card__icon,
+#app.reference-theme .next-action__icon,
+#app.reference-theme .stat-tile__icon-wrap,
+#app.reference-theme .category-picker-item__icon,
+#app.reference-theme .skill-card__icon,
+#app.reference-theme .habit-card__icon,
+#app.reference-theme .family-card__icon,
+#app.reference-theme .report-card__icon {
+  border-radius: 13px !important;
+  background: linear-gradient(135deg, rgba(61,155,233,.24), rgba(155,123,240,.22)) !important;
+}
+
+#app.reference-theme .money-tool-card__icon svg,
+#app.reference-theme .next-action__icon svg,
+#app.reference-theme .stat-tile__icon,
+#app.reference-theme .detail-section-title svg,
+#app.reference-theme .state-block__icon {
+  stroke: var(--ref-blue-light);
+}
+
+#app.reference-theme .detail-section-title {
+  color: var(--ref-text);
+}
+
+#app.reference-theme .detail-section-title svg { color: var(--ref-blue-light); }
+
+/* Give common standalone SVG icons a reference-dashboard palette. */
+#app.reference-theme .screen > svg,
+#app.reference-theme .screen-title-row svg,
+#app.reference-theme .card > svg {
+  color: var(--ref-blue-light);
+  stroke: currentColor;
+}
+
+/* ---------------- LIST ROWS / DATA ---------------- */
+#app.reference-theme .mission-item,
+#app.reference-theme .activity-row,
+#app.reference-theme .dash-action-row {
+  border-color: var(--ref-border) !important;
+}
+
+#app.reference-theme .mission-item__text,
+#app.reference-theme .activity-row__desc,
+#app.reference-theme .detail-meta-item__value,
+#app.reference-theme .goal-card__name,
+#app.reference-theme .project-card__name {
+  color: var(--ref-text);
+}
+
+#app.reference-theme .mission-item__xp,
+#app.reference-theme .activity-row__xp {
+  color: var(--ref-green) !important;
+}
+
+#app.reference-theme .stat-tile__value,
+#app.reference-theme .goal-card__progress-pct {
+  color: #fff;
+}
+
+/* ---------------- SPECIAL PANELS ---------------- */
+#app.reference-theme .mind-disclaimer {
+  background: rgba(20,26,44,.62) !important;
+  border: 1px solid var(--ref-border) !important;
+  border-radius: 14px !important;
+}
+
+#app.reference-theme .coach-bubble--user {
+  background: linear-gradient(135deg, #3D9BE9, #6B5CE9) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+#app.reference-theme .coach-bubble--assistant {
+  background: rgba(23,31,53,.9) !important;
+  color: var(--ref-text) !important;
+}
+
+#app.reference-theme .toggle-switch.is-on {
+  background: linear-gradient(135deg, var(--ref-blue), var(--ref-purple)) !important;
+  border-color: transparent !important;
+}
+
+#app.reference-theme .record-btn {
+  background: linear-gradient(135deg, var(--ref-pink), #9B7BF0) !important;
+  box-shadow: 0 10px 30px -8px rgba(240,96,155,.45);
+}
+
+/* ---------------- BOTTOM NAV ---------------- */
+#app.reference-theme + .bottom-nav-wrap,
+#app.reference-theme .bottom-nav-wrap {
+  /* The real nav is a sibling of #screen-root; handled below by body class. */
+}
+
+body.reference-theme-active .bottom-nav-wrap {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+body.reference-theme-active .bottom-nav {
+  background: rgba(13,18,32,.91);
+  border: 1px solid rgba(255,255,255,.09);
+  box-shadow: 0 12px 35px -16px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.025);
+  border-radius: 18px;
+}
+
+body.reference-theme-active .nav-item {
+  color: #707B93;
+}
+
+body.reference-theme-active .nav-item.is-active {
+  color: #fff;
+}
+
+body.reference-theme-active .nav-item.is-active::before {
+  background: linear-gradient(90deg, #3D9BE9, #9B7BF0);
+  box-shadow: 0 0 10px rgba(61,155,233,.55);
+}
+
+/* ---------------- SCROLL / MOBILE ---------------- */
+#app.reference-theme #screen-root {
+  min-height: 100vh;
+}
+
+@media (max-width: 600px) {
+  #app.reference-theme .screen {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: calc(var(--nav-height) + 30px + var(--safe-bottom));
+  }
+
+  #app.reference-theme .screen-title-row h1 { font-size: 24px; }
+
+  #app.reference-theme .card,
+  #app.reference-theme .quote-card,
+  #app.reference-theme .goal-card,
+  #app.reference-theme .project-card {
+    padding: 16px;
+  }
+}
+
+/* Do not visually alter Agenda/Pawa Beloha: main.js removes this class there. */

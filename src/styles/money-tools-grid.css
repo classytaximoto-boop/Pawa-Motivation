@@ -1,0 +1,62 @@
+/* ============================================================
+   MONEY — TOOLS GRID (Comptes / Catégories / Dettes / Planifiés / Stats)
+   Remplace l'ancienne rangée de chips dans .screen-title-row, qui
+   débordait horizontalement. Grille qui enveloppe naturellement —
+   jamais de défilement horizontal, quel que soit le nombre d'entrées
+   ou la largeur de l'écran.
+   ============================================================ */
+.money-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+
+@media (max-width: 360px) {
+  .money-tools-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.money-tool-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--sp-3) var(--sp-2);
+  text-align: center;
+  transition: border-color var(--dur-fast), background var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+}
+
+.money-tool-card:active {
+  transform: scale(0.97);
+  background: var(--bg-surface-hover);
+}
+
+.money-tool-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-raised);
+}
+
+.money-tool-card__icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--steel-400);
+  stroke-width: 1.8;
+}
+
+.money-tool-card__label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.2;
+}
